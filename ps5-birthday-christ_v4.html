@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday CHRIST 🎮</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;900&family=Archivo+Narrow:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#000103;
+  --ps-blue:#003791;
+  --ps-accent:#0072CE;
+  --ps-glow:#00D2FF;
+  --ps-white:#F5F5F7;
+  --ps-gray:#8a8fa8;
+  --ps-gold:#D4AF37;
+  --ps-silver:#C0C0C0;
+  --ps-bronze:#CD7F32;
+  --glass:rgba(255,255,255,0.055);
+  --glass-h:rgba(255,255,255,0.10);
+  --glass-b:rgba(255,255,255,0.10);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ps-white);font-family:'Archivo',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* ── PARTICLES CANVAS ── */
+#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
+#grid-lines{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(0,114,206,0.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,114,206,0.035) 1px,transparent 1px);
+  background-size:58px 58px;
+}
+
+/* ══════════════════ BOOT SCREEN ══════════════════ */
+#boot{
+  position:fixed;inset:0;z-index:400;background:#000103;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
+  transition:opacity 1s ease;
+}
+#boot.out{opacity:0;pointer-events:none}
+.b-logo{display:flex;align-items:flex-end;line-height:1;gap:0.1em}
+.b-ps{font-size:clamp(80px,15vw,150px);font-weight:900;letter-spacing:-6px;color:#003791;
+  text-shadow:0 0 80px rgba(0,55,145,.7),0 0 160px rgba(0,55,145,.3)}
+.b-5{font-size:clamp(48px,9vw,90px);font-weight:900;color:var(--ps-white);padding-bottom:.1em}
+.b-prompt{font-size:12px;letter-spacing:5px;text-transform:uppercase;color:rgba(245,245,247,.35);animation:blk 1.8s ease-in-out infinite}
+@keyframes blk{0%,100%{opacity:1}50%{opacity:.1}}
+.lang-pick{display:flex;gap:1rem}
+.lang-btn{
+  background:transparent;border:1.5px solid var(--ps-accent);
+  color:var(--ps-white);padding:.85rem 2.5rem;
+  font-family:'Archivo',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  border-radius:60px;cursor:pointer;transition:all .22s;
+  box-shadow:0 0 20px rgba(0,114,206,.25);
+}
+.lang-btn:hover{background:var(--ps-accent);color:#000;box-shadow:0 0 45px rgba(0,114,206,.7);transform:scale(1.05)}
+.lang-btn:active{transform:scale(.97)}
+.b-hint{font-size:10px;letter-spacing:3px;color:rgba(245,245,247,.2)}
+
+/* ══════════════════ APP ══════════════════ */
+#app{position:relative;z-index:1;min-height:100vh;opacity:0;transition:opacity 1s ease;padding-bottom:5rem}
+#app.vis{opacity:1}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.9rem 2rem;position:sticky;top:0;z-index:100;
+  background:rgba(0,1,3,.75);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.tb-logo{font-weight:900;font-size:16px;letter-spacing:-1px;color:var(--ps-accent)}
+.tb-center{display:flex;gap:.5rem}
+.tb-nav{
+  background:transparent;border:1px solid rgba(255,255,255,.1);
+  color:rgba(245,245,247,.6);padding:.4rem 1rem;border-radius:30px;
+  font-family:'Archivo',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;
+}
+.tb-nav:hover,.tb-nav.active{background:rgba(0,114,206,.2);border-color:var(--ps-accent);color:var(--ps-white)}
+.tb-right{display:flex;gap:.75rem;align-items:center}
+.tb-time{font-size:11px;color:var(--ps-gray);letter-spacing:1px;font-variant-numeric:tabular-nums}
+.tb-lang{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  color:var(--ps-white);padding:.3rem .75rem;border-radius:20px;
+  font-family:'Archivo',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;
+  cursor:pointer;transition:all .2s;
+}
+.tb-lang:hover{background:var(--ps-accent);border-color:var(--ps-accent)}
+.batt{width:24px;height:12px;border:1.5px solid rgba(245,245,247,.3);border-radius:3px;position:relative;padding:2px}
+.batt::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:2.5px;height:6px;background:rgba(245,245,247,.3);border-radius:0 2px 2px 0}
+.batt-f{height:100%;width:80%;background:var(--ps-accent);border-radius:1px}
+
+/* ══════════════════ PAGE: HOME ══════════════════ */
+.page{display:none}
+.page.show{display:block}
+
+/* HERO */
+.hero{padding:4rem 2rem 2rem;max-width:980px;margin:0 auto}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--ps-accent);margin-bottom:1rem;
+}
+.hero-badge::before,.hero-badge::after{content:'';display:block;width:18px;height:1px;background:var(--ps-accent)}
+.hero-title{font-size:clamp(36px,9vw,88px);font-weight:900;line-height:1;letter-spacing:-3px;margin-bottom:.6rem}
+.hero-title .blue{color:var(--ps-accent)}
+.hero-title .glow{color:var(--ps-glow);text-shadow:0 0 30px rgba(0,210,255,.4)}
+.hero-sub{font-size:15px;color:var(--ps-gray);font-family:'Archivo Narrow',sans-serif;letter-spacing:.5px}
+
+/* XP */
+.xp-wrap{max-width:980px;margin:0 auto 3rem;padding:0 2rem}
+.xp-top{display:flex;justify-content:space-between;margin-bottom:.5rem}
+.xp-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ps-gray)}
+.xp-val{font-size:9px;color:var(--ps-accent);letter-spacing:2px}
+.xp-bar{height:3px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
+.xp-fill{height:100%;width:0;background:linear-gradient(90deg,#003791,#0072CE,#00D2FF);border-radius:3px;transition:width 2.2s cubic-bezier(.22,1,.36,1)}
+
+.sec-lbl{max-width:980px;margin:0 auto 1.25rem;padding:0 2rem;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(245,245,247,.28)}
+
+/* TILES */
+.tiles{max-width:980px;margin:0 auto;padding:0 2rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:1rem}
+.tile{
+  background:var(--glass);border:1px solid var(--glass-b);border-radius:18px;
+  padding:1.4rem 1.2rem 1.2rem;cursor:pointer;
+  transition:transform .22s,background .22s,border-color .22s,box-shadow .22s;
+  position:relative;overflow:hidden;min-height:145px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.tile::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 25% 25%,rgba(0,114,206,.16),transparent 65%);opacity:0;transition:opacity .3s;border-radius:18px}
+.tile:hover{transform:translateY(-5px) scale(1.025);background:var(--glass-h);border-color:rgba(0,114,206,.45);box-shadow:0 12px 50px rgba(0,114,206,.22)}
+.tile:hover::before{opacity:1}
+.tile:active{transform:scale(.97)}
+.tile-ico{font-size:28px;margin-bottom:.7rem;display:block}
+.tile-name{font-weight:700;font-size:13px;line-height:1.3;margin-bottom:.2rem}
+.tile-sub{font-size:10px;color:var(--ps-gray)}
+.bdg{position:absolute;top:11px;right:11px;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:20px}
+.bdg-b{background:var(--ps-accent);color:#fff}
+.bdg-g{background:var(--ps-gold);color:#000}
+.bdg-gr{background:#00c853;color:#000}
+.bdg-gl{background:var(--ps-glow);color:#000}
+
+.tile.feat{
+  grid-column:span 2;
+  background:linear-gradient(135deg,rgba(0,55,145,.22),rgba(0,114,206,.10));
+  border-color:rgba(0,114,206,.3);
+  flex-direction:row;align-items:center;gap:1.5rem;padding:1.75rem;
+}
+.tile.feat .tile-ico{font-size:46px;margin-bottom:0}
+@media(max-width:520px){.tile.feat{grid-column:span 1;flex-direction:column;align-items:flex-start}}
+
+.ctrl-deco{max-width:980px;margin:3rem auto 0;padding:0 2rem;display:flex;align-items:center;gap:1rem}
+.ctrl-line{flex:1;height:1px;background:rgba(255,255,255,.05)}
+.ctrl-syms{font-size:13px;color:rgba(245,245,247,.18);letter-spacing:4px}
+
+/* ══════════════════ PAGE: VISION BOARD ══════════════════ */
+.vb-hero{padding:4rem 2rem 2rem;max-width:980px;margin:0 auto}
+.vb-heading{font-size:clamp(22px,5vw,44px);font-weight:900;letter-spacing:-1.5px;margin-bottom:.4rem}
+.vb-heading .dlc{color:var(--ps-glow)}
+.vb-sub{font-size:14px;color:var(--ps-gray);font-family:'Archivo Narrow',sans-serif}
+
+.vb-layout{max-width:980px;margin:2rem auto;padding:0 2rem;display:grid;grid-template-columns:1fr 300px;gap:1.5rem}
+@media(max-width:700px){.vb-layout{grid-template-columns:1fr}}
+
+/* Vision cards */
+.vb-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:480px){.vb-grid{grid-template-columns:1fr}}
+
+.vb-card{
+  background:var(--glass);border:1px solid var(--glass-b);border-radius:18px;
+  overflow:hidden;position:relative;min-height:200px;
+  display:flex;flex-direction:column;
+  transition:transform .22s,box-shadow .22s;cursor:default;
+}
+.vb-card:hover{transform:translateY(-4px);box-shadow:0 0 30px rgba(0,210,255,.15)}
+
+.vb-card-img{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  font-size:56px;
+  background:linear-gradient(135deg,rgba(0,55,145,.3),rgba(0,114,206,.15));
+  padding:2rem;position:relative;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+/* Coming Soon banner */
+.vb-card-img::after{
+  content:attr(data-label);
+  position:absolute;top:10px;left:-22px;
+  background:var(--ps-accent);color:#fff;
+  font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:3px 28px;transform:rotate(-45deg);white-space:nowrap;
+}
+/* inner glow effect on image area */
+.vb-card-img::before{
+  content:'';position:absolute;inset:0;
+  box-shadow:inset 0 0 40px rgba(0,210,255,.12);
+  border-radius:0;pointer-events:none;
+}
+.vb-card-body{padding:1rem 1.1rem}
+.vb-card-tag{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--ps-accent);margin-bottom:.3rem}
+.vb-card-name{font-weight:700;font-size:14px;margin-bottom:.5rem}
+/* progress bar */
+.prog-wrap{display:flex;align-items:center;gap:.6rem}
+.prog-bar{flex:1;height:3px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--ps-blue),var(--ps-glow));border-radius:3px}
+.prog-pct{font-size:9px;color:var(--ps-glow);letter-spacing:1px;white-space:nowrap}
+
+/* ── GALLERY UPLOAD ── */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1rem}
+@media(max-width:480px){.gallery-grid{grid-template-columns:repeat(2,1fr)}}
+.gal-item{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;background:rgba(255,255,255,.05);border:1px solid var(--glass-b);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s}
+.gal-item:hover{transform:scale(1.03)}
+.gal-item img,.gal-item video{width:100%;height:100%;object-fit:cover}
+.gal-item .del-btn{position:absolute;top:5px;right:5px;background:rgba(220,50,50,.85);border:none;color:#fff;width:22px;height:22px;border-radius:50%;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center;line-height:1}
+.gal-item:hover .del-btn{display:flex}
+.gal-item .dl-btn{position:absolute;bottom:5px;right:5px;background:rgba(0,114,206,.85);border:none;color:#fff;width:22px;height:22px;border-radius:50%;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center}
+.gal-item:hover .dl-btn{display:flex}
+.gal-type-badge{position:absolute;top:5px;left:5px;background:rgba(0,0,0,.6);color:#fff;font-size:8px;letter-spacing:1px;padding:2px 6px;border-radius:8px;text-transform:uppercase}
+.upload-zone{border:2px dashed rgba(0,114,206,.4);border-radius:16px;padding:2rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:.75rem}
+.upload-zone:hover{border-color:var(--ps-accent);background:rgba(0,114,206,.07)}
+.upload-zone input{display:none}
+.upload-icon{font-size:32px;margin-bottom:.5rem}
+.upload-text{font-size:12px;color:var(--ps-gray)}
+.upload-text strong{color:var(--ps-accent)}
+.upload-actions{display:flex;gap:.5rem;margin-bottom:.5rem}
+.upload-btn{flex:1;background:rgba(0,114,206,.18);border:1px solid rgba(0,114,206,.35);color:var(--ps-white);padding:.6rem;border-radius:10px;font-family:'Archivo',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:background .2s}
+.upload-btn:hover{background:rgba(0,114,206,.35)}
+.gal-empty{text-align:center;padding:1.5rem;color:var(--ps-gray);font-size:13px}
+.gal-count{font-size:10px;color:var(--ps-gray);letter-spacing:2px;margin-bottom:.75rem}
+
+/* ── QUEST LOG ── */
+.quest-section{margin-bottom:1.25rem}
+.quest-section-title{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--ps-accent);margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+.quest-section-title::after{content:'';flex:1;height:1px;background:rgba(0,114,206,.25)}
+.quest-item{background:rgba(255,255,255,.05);border:1px solid var(--glass-b);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:.5rem;display:flex;align-items:flex-start;gap:.8rem;cursor:pointer;transition:border-color .2s,background .2s}
+.quest-item:hover{border-color:rgba(0,114,206,.4);background:rgba(0,114,206,.07)}
+.quest-item.done{border-color:rgba(0,200,83,.3);background:rgba(0,200,83,.06)}
+.quest-ico{font-size:20px;min-width:28px;text-align:center;margin-top:1px}
+.quest-text{flex:1}
+.quest-name{font-weight:700;font-size:13px;margin-bottom:.2rem}
+.quest-detail{font-size:11px;color:var(--ps-gray);line-height:1.5}
+.quest-xp{font-size:8px;letter-spacing:2px;color:var(--ps-gold);text-transform:uppercase;margin-top:.3rem}
+.quest-check{font-size:16px;min-width:20px;text-align:right;opacity:.35;transition:opacity .2s}
+.quest-item.done .quest-check{opacity:1;color:#00c853}
+
+/* ── GAME OVERLAY ── */
+.game-tabs{display:flex;gap:.5rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.gtab{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(245,245,247,.6);padding:.4rem 1rem;border-radius:30px;font-family:'Archivo',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.gtab:hover,.gtab.active{background:rgba(0,114,206,.25);border-color:var(--ps-accent);color:var(--ps-white)}
+
+/* UNO */
+.uno-table{background:radial-gradient(ellipse at center,rgba(0,80,20,.5),rgba(0,20,50,.8));border:2px solid rgba(0,200,83,.2);border-radius:20px;padding:1.25rem;text-align:center;min-height:200px}
+.uno-pile{display:flex;justify-content:center;gap:.5rem;margin:1rem 0;flex-wrap:wrap}
+.uno-card{width:46px;height:68px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;border:3px solid rgba(255,255,255,.3);cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.uno-card:hover{transform:translateY(-8px);box-shadow:0 12px 24px rgba(0,0,0,.5)}
+.uno-card.red{background:linear-gradient(135deg,#e53935,#b71c1c)}
+.uno-card.blue{background:linear-gradient(135deg,#1565c0,#003791)}
+.uno-card.green{background:linear-gradient(135deg,#2e7d32,#1b5e20)}
+.uno-card.yellow{background:linear-gradient(135deg,#f9a825,#e65100);color:#000}
+.uno-card.black{background:linear-gradient(135deg,#212121,#424242)}
+.uno-card.selected{transform:translateY(-12px);box-shadow:0 0 20px rgba(255,255,100,.5)}
+.uno-center{font-size:11px;color:rgba(245,245,247,.6);margin:.5rem 0}
+.uno-btn{background:rgba(0,114,206,.25);border:1px solid rgba(0,114,206,.4);color:var(--ps-white);padding:.5rem 1.2rem;border-radius:20px;font-family:'Archivo',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;margin:.3rem;transition:background .2s}
+.uno-btn:hover{background:rgba(0,114,206,.5)}
+.uno-status{font-size:12px;color:var(--ps-glow);letter-spacing:1px;margin:.5rem 0;min-height:20px}
+.uno-scores{display:flex;justify-content:center;gap:1rem;margin:.5rem 0;flex-wrap:wrap}
+.uno-score-item{font-size:10px;letter-spacing:1px;color:var(--ps-gray);background:rgba(255,255,255,.05);padding:.3rem .75rem;border-radius:10px}
+.uno-score-item span{color:var(--ps-glow);font-weight:700}
+
+/* QUIZ */
+.quiz-wrap{text-align:center}
+.quiz-cat-selector{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem}
+.quiz-cat-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:rgba(245,245,247,.7);padding:.35rem .8rem;border-radius:20px;font-family:'Archivo',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.quiz-cat-btn:hover,.quiz-cat-btn.active{background:rgba(0,114,206,.3);border-color:var(--ps-accent);color:#fff}
+.quiz-q{background:rgba(255,255,255,.06);border:1px solid var(--glass-b);border-radius:16px;padding:1.25rem;margin-bottom:1rem;font-size:14px;font-weight:700;line-height:1.5;min-height:70px;display:flex;align-items:center;justify-content:center}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.75rem}
+.quiz-opt{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:12px;padding:.75rem .6rem;font-family:'Archivo',sans-serif;font-size:12px;font-weight:600;color:var(--ps-white);cursor:pointer;transition:all .2s;line-height:1.3}
+.quiz-opt:hover:not(:disabled){background:rgba(0,114,206,.2);border-color:var(--ps-accent)}
+.quiz-opt.correct{background:rgba(0,200,83,.2);border-color:#00c853;color:#00c853}
+.quiz-opt.wrong{background:rgba(220,50,50,.2);border-color:#e53935;color:#e53935}
+.quiz-opt:disabled{cursor:default}
+.quiz-feedback{font-size:12px;min-height:18px;margin:.3rem 0;color:var(--ps-glow)}
+.quiz-score-bar{display:flex;justify-content:space-between;align-items:center;margin:.5rem 0}
+.quiz-score{font-size:11px;color:var(--ps-gray);letter-spacing:2px}
+.quiz-prog{font-size:11px;color:var(--ps-accent);letter-spacing:2px}
+.quiz-next{background:rgba(0,114,206,.25);border:1px solid rgba(0,114,206,.5);color:var(--ps-white);padding:.55rem 1.5rem;border-radius:20px;font-family:'Archivo',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:background .2s}
+.quiz-next:hover{background:rgba(0,114,206,.5)}
+
+/* ── TROPHY SIDEBAR ── */
+.trophy-sidebar{display:flex;flex-direction:column;gap:1rem}
+.trophy-title{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--ps-gray);margin-bottom:.25rem}
+
+.trophy{
+  background:var(--glass);border:1px solid var(--glass-b);border-radius:16px;
+  padding:1.1rem;display:flex;gap:.9rem;align-items:flex-start;
+  position:relative;overflow:hidden;
+  transition:border-color .25s,box-shadow .25s;
+}
+.trophy:hover{border-color:rgba(255,255,255,.2);box-shadow:0 4px 24px rgba(0,0,0,.3)}
+.trophy-ico{font-size:28px;min-width:36px;text-align:center;filter:drop-shadow(0 0 8px currentColor)}
+.trophy-ico.plat{color:var(--ps-glow);filter:drop-shadow(0 0 10px rgba(0,210,255,.6))}
+.trophy-ico.gold{color:var(--ps-gold);filter:drop-shadow(0 0 8px rgba(212,175,55,.5))}
+.trophy-ico.silver{color:var(--ps-silver);filter:drop-shadow(0 0 8px rgba(192,192,192,.4))}
+.trophy-ico.bronze{color:var(--ps-bronze);filter:drop-shadow(0 0 8px rgba(205,127,50,.4))}
+.trophy-info{}
+.trophy-rank{font-size:8px;letter-spacing:3px;text-transform:uppercase;margin-bottom:.2rem}
+.trophy-rank.plat{color:var(--ps-glow)}
+.trophy-rank.gold{color:var(--ps-gold)}
+.trophy-rank.silver{color:var(--ps-silver)}
+.trophy-rank.bronze{color:var(--ps-bronze)}
+.trophy-name{font-weight:700;font-size:13px;margin-bottom:.2rem}
+.trophy-desc{font-size:11px;color:var(--ps-gray);line-height:1.5}
+.trophy-lock{
+  position:absolute;top:10px;right:10px;
+  font-size:9px;letter-spacing:1px;color:rgba(245,245,247,.3);
+  background:rgba(255,255,255,.05);border-radius:10px;padding:2px 7px;
+}
+
+.vb-footer{
+  max-width:980px;margin:2rem auto;padding:0 2rem;
+  text-align:center;
+}
+.vb-footer-msg{
+  font-size:12px;letter-spacing:2px;color:rgba(245,245,247,.4);
+  border-top:1px solid rgba(255,255,255,.06);padding-top:1.5rem;
+  font-family:'Archivo Narrow',sans-serif;
+}
+.vb-footer-msg span{color:var(--ps-glow)}
+
+/* ══════════════════ OVERLAYS / PANELS ══════════════════ */
+.overlay{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,1,3,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  display:flex;align-items:center;justify-content:center;padding:1rem;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.overlay.open{opacity:1;pointer-events:all}
+.panel{
+  background:rgba(6,10,26,.96);border:1px solid rgba(0,114,206,.22);border-radius:22px;
+  padding:2.5rem;max-width:580px;width:100%;max-height:88vh;overflow-y:auto;
+  transform:translateY(18px) scale(.98);transition:transform .3s;position:relative;
+}
+.overlay.open .panel{transform:translateY(0) scale(1)}
+.p-close{
+  position:absolute;top:1.2rem;right:1.2rem;
+  background:rgba(255,255,255,.07);border:1px solid var(--glass-b);
+  color:var(--ps-white);width:34px;height:34px;border-radius:50%;
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.p-close:hover{background:rgba(255,255,255,.15)}
+.p-ico{font-size:42px;margin-bottom:1rem;display:block}
+.p-title{font-size:24px;font-weight:900;letter-spacing:-1px;margin-bottom:.25rem}
+.p-sub{font-size:13px;color:var(--ps-gray);margin-bottom:1.75rem}
+.p-div{border:none;border-top:1px solid rgba(255,255,255,.07);margin:1.5rem 0}
+
+/* Story */
+.mem-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.mem-card{background:rgba(255,255,255,.05);border:1px solid var(--glass-b);border-radius:14px;padding:1.2rem}
+.mem-yr{font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--ps-accent);margin-bottom:.4rem}
+.mem-txt{font-size:13px;line-height:1.6;color:rgba(245,245,247,.85)}
+@media(max-width:480px){.mem-grid{grid-template-columns:1fr}}
+
+/* Achievements */
+.ach{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.5rem}
+.ach-ico{font-size:30px;min-width:44px;text-align:center}
+.ach-name{font-weight:700;font-size:15px;margin-bottom:.2rem}
+.ach-desc{font-size:13px;color:var(--ps-gray);line-height:1.55}
+.ach-xp{font-size:8px;color:var(--ps-gold);letter-spacing:3px;text-transform:uppercase;margin-top:.4rem}
+.ach-prog{height:2px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:.5rem;overflow:hidden}
+.ach-prog-f{height:100%;background:linear-gradient(90deg,var(--ps-blue),var(--ps-glow));border-radius:2px}
+
+/* Multiplayer */
+.msg{background:rgba(255,255,255,.05);border:1px solid var(--glass-b);border-radius:14px;padding:1.2rem;margin-bottom:.75rem}
+.msg-h{display:flex;align-items:center;gap:.75rem;margin-bottom:.7rem}
+.avatar{width:38px;height:38px;border-radius:50%;background:rgba(0,55,145,.4);border:1px solid rgba(0,114,206,.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--ps-accent);flex-shrink:0}
+.msg-from{font-weight:700;font-size:14px;margin-bottom:1px}
+.msg-role{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ps-gray)}
+.msg-body{font-size:14px;line-height:1.65;color:rgba(245,245,247,.85);font-style:italic}
+
+/* DLC Coupon */
+.coupon{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(0,20,70,.9),rgba(0,55,145,.5));
+  border:1.5px dashed rgba(0,114,206,.5);border-radius:18px;
+  padding:2.25rem 2rem;text-align:center;margin-bottom:.75rem;
+}
+.coupon::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,114,206,.2),transparent 70%)}
+.coupon::after{content:'';position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(0,55,145,.3),transparent 70%)}
+.cpn-type{font-size:8px;letter-spacing:5px;text-transform:uppercase;color:var(--ps-accent);margin-bottom:.5rem}
+.cpn-title{font-size:22px;font-weight:900;letter-spacing:-.5px;margin-bottom:.5rem}
+.cpn-desc{font-size:13px;color:rgba(245,245,247,.65);margin-bottom:1.25rem;line-height:1.5}
+.cpn-code{font-size:24px;font-weight:700;letter-spacing:6px;color:var(--ps-gold);font-family:'Archivo Narrow',sans-serif}
+.cpn-valid{font-size:8px;color:rgba(245,245,247,.3);margin-top:.6rem;letter-spacing:2px}
+
+/* Countdown */
+.cd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;text-align:center;margin:1.5rem 0}
+.cd-box{background:rgba(255,255,255,.05);border:1px solid var(--glass-b);border-radius:14px;padding:1.25rem .5rem}
+.cd-num{font-size:34px;font-weight:900;color:var(--ps-glow);letter-spacing:-2px;line-height:1}
+.cd-lbl{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--ps-gray);margin-top:.3rem}
+@media(max-width:400px){.cd-grid{grid-template-columns:1fr 1fr}}
+
+/* Infos */
+.info-row{background:rgba(255,255,255,.05);border:1px solid var(--glass-b);border-radius:14px;padding:1.2rem;display:flex;align-items:center;gap:1rem;margin-bottom:.75rem}
+.info-ico{font-size:26px;min-width:38px;text-align:center}
+.info-lbl{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--ps-accent);margin-bottom:.3rem}
+.info-val{font-weight:700;font-size:15px}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,114,206,.35);border-radius:4px}
+
+/* responsive */
+@media(max-width:600px){
+  .tiles{grid-template-columns:1fr 1fr;padding:0 1rem}
+  .hero,.vb-hero{padding:3rem 1.25rem 1.5rem}
+  .panel{padding:1.75rem 1.25rem}
+  .tb-center{display:none}
+  .vb-layout{padding:0 1rem}
+}
+</style>
+</head>
+<body>
+
+<canvas id="cvs"></canvas>
+<div id="grid-lines"></div>
+
+<!-- ══════════ BOOT SCREEN ══════════ -->
+<div id="boot">
+  <div class="b-logo"><span class="b-ps">PS</span><span class="b-5">5</span></div>
+  <p class="b-prompt" id="b-prompt-txt">Choisissez votre langue · Choose your language</p>
+  <div class="lang-pick">
+    <button class="lang-btn" onclick="startApp('fr')">🇫🇷 &nbsp;Français</button>
+    <button class="lang-btn" onclick="startApp('en')">🇬🇧 &nbsp;English</button>
+  </div>
+  <p class="b-hint">© CHRIST 2026 EXPANSION PACK</p>
+</div>
+
+<!-- ══════════ MAIN APP ══════════ -->
+<div id="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <span class="tb-logo">PS5</span>
+    <div class="tb-center">
+      <button class="tb-nav active" onclick="showPage('home',this)" id="nav-home">Home</button>
+      <button class="tb-nav" onclick="showPage('vision',this)" id="nav-vision">DLC</button>
+    </div>
+    <div class="tb-right">
+      <span class="tb-time" id="clock">--:--</span>
+      <button class="tb-lang" onclick="toggleLang()" id="lang-toggle">EN</button>
+      <div class="batt"><div class="batt-f"></div></div>
+    </div>
+  </div>
+
+  <!-- ═══════ PAGE: HOME ═══════ -->
+  <div class="page show" id="page-home">
+
+    <div class="hero">
+      <p class="hero-badge" id="h-badge">Édition Anniversaire Spéciale</p>
+      <h1 class="hero-title">Happy Birthday<br><span class="blue">CHRIST</span> <span class="glow">🎮</span></h1>
+      <p class="hero-sub" id="h-sub">Level débloqué. Nouvelles missions disponibles.</p>
+      <p style="margin-top:1.1rem;font-size:13px;color:rgba(245,245,247,.55);font-family:'Archivo Narrow',sans-serif;letter-spacing:.5px;font-style:italic;">
+        « Que l'Éternel tourne sa face vers toi, et te donne la paix. » — <span style="color:var(--ps-accent);font-style:normal;font-weight:700;">Nombres 6:26</span>
+      </p>
+    </div>
+
+    <div class="xp-wrap">
+      <div class="xp-top">
+        <span class="xp-lbl" id="xp-lbl">Expérience de vie accumulée</span>
+        <span class="xp-val" id="xp-val">XP Loading...</span>
+      </div>
+      <div class="xp-bar"><div class="xp-fill" id="xp-fill"></div></div>
+    </div>
+
+    <p class="sec-lbl" id="sec-apps">Vos Applications</p>
+
+    <div class="tiles">
+
+      <div class="tile feat" onclick="openOverlay('story')">
+        <span class="tile-ico">📸</span>
+        <div>
+          <div class="tile-name" id="t1-name">The Story of CHRIST</div>
+          <div class="tile-sub" id="t1-sub">Galerie Souvenirs</div>
+        </div>
+        <span class="bdg bdg-gl">NEW</span>
+      </div>
+
+      <div class="tile" onclick="openOverlay('achievement')">
+        <span class="tile-ico">🏆</span>
+        <div>
+          <div class="tile-name" id="t2-name">Achievement Unlocked</div>
+          <div class="tile-sub" id="t2-sub">Succès débloqués</div>
+        </div>
+        <span class="bdg bdg-g">GOLD</span>
+      </div>
+
+      <div class="tile" onclick="openOverlay('dlc')">
+        <span class="tile-ico">🎁</span>
+        <div>
+          <div class="tile-name" id="t4-name">DLC Pack</div>
+          <div class="tile-sub" id="t4-sub">Cadeau numérique</div>
+        </div>
+        <span class="bdg bdg-b">EXCLUSIF</span>
+      </div>
+
+      <div class="tile" onclick="openOverlay('countdown')">
+        <span class="tile-ico">⏳</span>
+        <div>
+          <div class="tile-name" id="t5-name">Compte à Rebours</div>
+          <div class="tile-sub" id="t5-sub">Jusqu'à la fête</div>
+        </div>
+      </div>
+
+      <div class="tile" onclick="showPage('vision',document.getElementById('nav-vision'))">
+        <span class="tile-ico">🌌</span>
+        <div>
+          <div class="tile-name" id="t7-name">Library · Jeu</div>
+          <div class="tile-sub" id="t7-sub">Vision Board 2026</div>
+        </div>
+        <span class="bdg bdg-gl">DLC</span>
+      </div>
+
+      <div class="tile" onclick="openOverlay('questlog')">
+        <span class="tile-ico">📋</span>
+        <div>
+          <div class="tile-name">Quest Log</div>
+          <div class="tile-sub">Objectifs de vie</div>
+        </div>
+        <span class="bdg bdg-b">2026</span>
+      </div>
+
+      <div class="tile feat" onclick="openOverlay('games')">
+        <span class="tile-ico">🎲</span>
+        <div>
+          <div class="tile-name">Jeu</div>
+          <div class="tile-sub">UNO · Quiz Gabon · Culture Générale</div>
+        </div>
+        <span class="bdg bdg-g">PLAY</span>
+      </div>
+
+    </div>
+
+    <div class="ctrl-deco">
+      <div class="ctrl-line"></div>
+      <span class="ctrl-syms">✕ &nbsp;○ &nbsp;□ &nbsp;△</span>
+      <div class="ctrl-line"></div>
+    </div>
+
+  </div><!-- /page-home -->
+
+  <!-- ═══════ PAGE: VISION BOARD ═══════ -->
+  <div class="page" id="page-vision">
+
+    <div class="vb-hero">
+      <p class="hero-badge" id="vb-badge">Upcoming DLC</p>
+      <h1 class="vb-heading">
+        <span class="dlc" id="vb-h1">CHRIST 2026</span><br>
+        <span id="vb-h2">Expansion Pack</span>
+      </h1>
+      <p class="vb-sub" id="vb-sub">Nouvelles quêtes · Objectifs débloqués · Gloire à venir</p>
+    </div>
+
+    <div class="vb-layout">
+
+      <!-- Vision Cards -->
+      <div class="vb-grid">
+
+        <div class="vb-card">
+          <div class="vb-card-img" data-label="CAREER MODE">🎓</div>
+          <div class="vb-card-body">
+            <div class="vb-card-tag" id="vc1-tag">Career Mode</div>
+            <div class="vb-card-name" id="vc1-name">Objectif Professionnel</div>
+            <div class="prog-wrap">
+              <div class="prog-bar"><div class="prog-fill" style="width:20%"></div></div>
+              <span class="prog-pct">20%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="vb-card">
+          <div class="vb-card-img" data-label="WORLD TOUR">✈️</div>
+          <div class="vb-card-body">
+            <div class="vb-card-tag" id="vc2-tag">World Tour Map</div>
+            <div class="vb-card-name" id="vc2-name">Destination Rêve</div>
+            <div class="prog-wrap">
+              <div class="prog-bar"><div class="prog-fill" style="width:15%"></div></div>
+              <span class="prog-pct">15%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="vb-card">
+          <div class="vb-card-img" data-label="APPRENTISSAGE">📚</div>
+          <div class="vb-card-body">
+            <div class="vb-card-tag" id="vc3-tag">Skill Tree</div>
+            <div class="vb-card-name" id="vc3-name">Apprendre & Grandir</div>
+            <div class="prog-wrap">
+              <div class="prog-bar"><div class="prog-fill" style="width:30%"></div></div>
+              <span class="prog-pct">30%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="vb-card">
+          <div class="vb-card-img" data-label="STAT BOOST">💪</div>
+          <div class="vb-card-body">
+            <div class="vb-card-tag" id="vc4-tag">Physical Stat Boost</div>
+            <div class="vb-card-name" id="vc4-name">Santé & Forme</div>
+            <div class="prog-wrap">
+              <div class="prog-bar"><div class="prog-fill" style="width:25%"></div></div>
+              <span class="prog-pct">25%</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /vb-grid -->
+
+      <!-- Jeu Sidebar -->
+      <div class="trophy-sidebar">
+        <p class="trophy-title">Jeu — Accès Rapide</p>
+
+        <div class="trophy" onclick="openOverlay('games');setTimeout(()=>switchGameTab('uno'),100)" style="cursor:pointer">
+          <div class="trophy-ico" style="color:#e53935;filter:drop-shadow(0 0 8px rgba(229,57,53,.5))">🃏</div>
+          <div class="trophy-info">
+            <div class="trophy-rank" style="color:#e53935;">UNO</div>
+            <div class="trophy-name">Uno Virtuel</div>
+            <div class="trophy-desc">Joue une partie d'UNO — tire des cartes, retourne la partie !</div>
+          </div>
+        </div>
+
+        <div class="trophy" onclick="openOverlay('games');setTimeout(()=>switchGameTab('quiz-gabon'),100)" style="cursor:pointer">
+          <div class="trophy-ico" style="color:#00c853;filter:drop-shadow(0 0 8px rgba(0,200,83,.5))">🇬🇦</div>
+          <div class="trophy-info">
+            <div class="trophy-rank" style="color:#00c853;">GABON</div>
+            <div class="trophy-name">Quiz Gabon</div>
+            <div class="trophy-desc">Teste tes connaissances sur le Gabon — culture, histoire, géographie.</div>
+          </div>
+        </div>
+
+        <div class="trophy" onclick="openOverlay('games');setTimeout(()=>switchGameTab('quiz-global'),100)" style="cursor:pointer">
+          <div class="trophy-ico gold">🌍</div>
+          <div class="trophy-info">
+            <div class="trophy-rank gold">CULTURE</div>
+            <div class="trophy-name">Culture Générale</div>
+            <div class="trophy-desc">Questions mondiales — sciences, histoire, sport, géo...</div>
+          </div>
+        </div>
+
+        <div class="trophy" onclick="openOverlay('questlog')" style="cursor:pointer">
+          <div class="trophy-ico" style="color:var(--ps-accent);filter:drop-shadow(0 0 8px rgba(0,114,206,.5))">📋</div>
+          <div class="trophy-info">
+            <div class="trophy-rank" style="color:var(--ps-accent);">QUEST</div>
+            <div class="trophy-name">Quest Log 2026</div>
+            <div class="trophy-desc">Carrière · Santé · Voyage · Apprentissage</div>
+          </div>
+        </div>
+
+      </div><!-- /jeu-sidebar -->
+    </div><!-- /vb-layout -->
+
+    <div class="vb-footer">
+      <p class="vb-footer-msg" id="vb-footer-msg">
+        System Update: Your potential is capped at <span>100%</span>.<br>
+        Loading greatness... <span>■■■■■■■■░░ 80%</span>
+      </p>
+    </div>
+
+    <div class="ctrl-deco">
+      <div class="ctrl-line"></div>
+      <span class="ctrl-syms">✕ &nbsp;○ &nbsp;□ &nbsp;△</span>
+      <div class="ctrl-line"></div>
+    </div>
+
+  </div><!-- /page-vision -->
+
+</div><!-- /app -->
+
+<!-- ══════════ OVERLAYS ══════════ -->
+
+<!-- Story / Gallery -->
+<div class="overlay" id="ov-story" onclick="bgClose(event,'story')">
+<div class="panel" style="max-width:680px">
+  <button class="p-close" onclick="closeOverlay('story')">✕</button>
+  <span class="p-ico">📸</span>
+  <h2 class="p-title" id="s-title">The Story of CHRIST</h2>
+  <p class="p-sub" id="s-sub">Galerie souvenirs · Photos & Vidéos</p>
+  <hr class="p-div">
+
+  <!-- Upload zone -->
+  <div class="upload-zone" onclick="document.getElementById('gal-input').click()">
+    <input type="file" id="gal-input" accept="image/*,video/*" multiple onchange="handleGalleryUpload(event)">
+    <div class="upload-icon">📁</div>
+    <div class="upload-text"><strong>Clique pour ajouter</strong> des photos ou vidéos<br><span style="font-size:10px">JPG, PNG, GIF, MP4, MOV — illimité</span></div>
+  </div>
+
+  <div id="gal-count" class="gal-count" style="display:none"></div>
+  <div id="gal-empty" class="gal-empty">📷 Aucun média pour l'instant — ajoutes tes meilleurs souvenirs !</div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+
+  <div class="upload-actions" style="margin-top:.75rem">
+    <button class="upload-btn" onclick="downloadAllMedia()">⬇ Tout télécharger</button>
+    <button class="upload-btn" style="background:rgba(200,50,50,.15);border-color:rgba(200,50,50,.3)" onclick="clearGallery()">🗑 Vider la galerie</button>
+  </div>
+  <p style="font-size:10px;color:var(--ps-gray);text-align:center;margin-top:.5rem">Les médias sont sauvegardés automatiquement dans ce navigateur 💾</p>
+</div>
+</div>
+
+<!-- Achievement -->
+<div class="overlay" id="ov-achievement" onclick="bgClose(event,'achievement')">
+<div class="panel">
+  <button class="p-close" onclick="closeOverlay('achievement')">✕</button>
+  <span class="p-ico">🏆</span>
+  <h2 class="p-title" id="a-title">Achievement Unlocked</h2>
+  <p class="p-sub" id="a-sub">Succès débloqués — CHRIST cette année</p>
+  <hr class="p-div">
+  <div class="ach">
+    <div class="ach-ico">🚀</div>
+    <div>
+      <div class="ach-name" id="a1n">[Accomplissement #1]</div>
+      <div class="ach-desc" id="a1d">Remplace ceci par un vrai succès de l'année de CHRIST — promotion, diplôme, projet réussi...</div>
+      <div class="ach-xp">+500 XP · RARE</div>
+      <div class="ach-prog"><div class="ach-prog-f" style="width:70%"></div></div>
+    </div>
+  </div>
+  <div class="ach">
+    <div class="ach-ico">💪</div>
+    <div>
+      <div class="ach-name" id="a2n">[Accomplissement #2]</div>
+      <div class="ach-desc" id="a2d">Un défi relevé avec style cette année. Ce joueur ne recule devant rien.</div>
+      <div class="ach-xp">+350 XP · UNCOMMON</div>
+      <div class="ach-prog"><div class="ach-prog-f" style="width:55%"></div></div>
+    </div>
+  </div>
+  <div class="ach">
+    <div class="ach-ico">⭐</div>
+    <div>
+      <div class="ach-name" id="a3n">[Accomplissement #3]</div>
+      <div class="ach-desc" id="a3d">La qualité rare d'un ami comme CHRIST : toujours présent, toujours authentique.</div>
+      <div class="ach-xp">+999 XP · LEGENDARY</div>
+      <div class="ach-prog"><div class="ach-prog-f" style="width:99%"></div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- DLC -->
+<div class="overlay" id="ov-dlc" onclick="bgClose(event,'dlc')">
+<div class="panel">
+  <button class="p-close" onclick="closeOverlay('dlc')">✕</button>
+  <span class="p-ico">🎁</span>
+  <h2 class="p-title" id="d-title">DLC — Contenu Téléchargeable</h2>
+  <p class="p-sub" id="d-sub">Cadeau numérique exclusif · Édition Limitée</p>
+  <hr class="p-div">
+  <div class="coupon">
+    <div class="cpn-type">PlayStation™ Gift Voucher · CHRIST Edition</div>
+    <div class="cpn-title" id="cpn-title">Cadeau d'anniversaire</div>
+    <div class="cpn-desc" id="cpn-desc">Échangeable contre une session co-op épique, un dîner, un concert ou une aventure au choix du détenteur</div>
+    <div class="cpn-code">CHRIST-2026-GG</div>
+    <div class="cpn-valid" id="cpn-valid">Valable à vie · Non transférable · Utilisation illimitée</div>
+  </div>
+  <p style="font-size:11px;color:var(--ps-gray);text-align:center" id="d-hint">✦ Personnalise le coupon avec ton vrai cadeau ✦</p>
+</div>
+</div>
+
+<!-- Countdown -->
+<div class="overlay" id="ov-countdown" onclick="bgClose(event,'countdown')">
+<div class="panel">
+  <button class="p-close" onclick="closeOverlay('countdown')">✕</button>
+  <span class="p-ico">⏳</span>
+  <h2 class="p-title" id="cd-title">Compte à Rebours</h2>
+  <p class="p-sub" id="cd-sub">Avant la fête du 27 Mars</p>
+  <hr class="p-div">
+  <div class="cd-grid">
+    <div class="cd-box"><div class="cd-num" id="cd-d">--</div><div class="cd-lbl" id="cd-dl">Jours</div></div>
+    <div class="cd-box"><div class="cd-num" id="cd-h">--</div><div class="cd-lbl" id="cd-hl">Heures</div></div>
+    <div class="cd-box"><div class="cd-num" id="cd-m">--</div><div class="cd-lbl" id="cd-ml">Minutes</div></div>
+    <div class="cd-box"><div class="cd-num" id="cd-s">--</div><div class="cd-lbl" id="cd-sl">Secondes</div></div>
+  </div>
+  <p style="font-size:12px;color:var(--ps-gray);text-align:center" id="cd-msg">La fête de CHRIST approche — prépare-toi ! 🎮</p>
+</div>
+</div>
+
+<!-- Infos -->
+<!-- Quest Log -->
+<div class="overlay" id="ov-questlog" onclick="bgClose(event,'questlog')">
+<div class="panel" style="max-width:600px">
+  <button class="p-close" onclick="closeOverlay('questlog')">✕</button>
+  <span class="p-ico">📋</span>
+  <h2 class="p-title">Quest Log 2026</h2>
+  <p class="p-sub">Objectifs de vie — Coche quand c'est accompli !</p>
+  <hr class="p-div">
+
+  <!-- CARRIÈRE -->
+  <div class="quest-section">
+    <div class="quest-section-title">💼 Carrière</div>
+    <div class="quest-item" onclick="toggleQuest(this)">
+      <span class="quest-ico">🎯</span>
+      <div class="quest-text">
+        <div class="quest-name">Objectif professionnel principal</div>
+        <div class="quest-detail">Promotion, nouveau poste, projet ambitieux — définis ton grand objectif de l'année et fonce.</div>
+        <div class="quest-xp">+500 XP · RARE</div>
+      </div>
+      <span class="quest-check">○</span>
+    </div>
+    <div class="quest-item" onclick="toggleQuest(this)">
+      <span class="quest-ico">📈</span>
+      <div class="quest-text">
+        <div class="quest-name">Développer son réseau professionnel</div>
+        <div class="quest-detail">Participer à des événements, rencontrer de nouvelles personnes dans ton domaine, LinkedIn actif.</div>
+        <div class="quest-xp">+250 XP · UNCOMMON</div>
+      </div>
+      <span class="quest-check">○</span>
+    </div>
+    <div class="quest-item" onclick="toggleQuest(this)">
+      <span class="quest-ico">💡</span>
+      <div class="quest-text">
+        <div class="quest-name">Lancer un projet personnel</div>
+        <div class="quest-detail">Side project, idée d'entrepreneur, création — cette année on passe à l'action.</div>
+        <div class="quest-xp">+400 XP · EPIC</div>
+      </div>
+      <span class="quest-check">○</span>
+    </div>
+  </div>
+
+  <!-- SANTÉ -->
+  <div class="quest-section">
+    <div class="quest-section-title">💪 Santé</div>
+    <div class="quest-item" onclick="toggleQuest(this)">
+      <span class="quest-ico">🏋️</span>
+      <div class="quest-text">
+        <div class="quest-name">Aller à la salle régulièrement</div>
+        <div class="quest-detail">3x par semaine minimum — chest day, leg day, rest day. No excuses, the gym doesn't lie.</div>
+        <div class="quest-xp">+300 XP · UNCOMMON</div>
+      </div>
+      <span class="quest-check">○</span>
+    </div>
+    <div class="quest-item" onclick="toggleQuest(this)">
+      <span class="quest-ico">🥗</span>
+      <div class="quest-text">
+        <div class="quest-name">Améliorer son alimentation</div>
+        <div class="quest-detail">Moins de junk food, plus de protéines, hydratation — le corps c'est ton premier équipement.</div>
+        <div class="quest-xp">+200 XP · COMMON</div>
+      </div>
+      <span class="quest-check">○</span>
+    </div>
+    <div class="quest-item" onclick="toggleQuest(this)">
+      <span class="quest-ico">😴</span>
+      <div class="quest-text">
+        <div class="quest-name">Optimiser son sommeil</div>
+        <div class="quest-detail">7-8h de sommeil par nuit, se lever tôt, routine matinale productive. Level up mental.</div>
+        <div class="quest-xp">+150 XP · COMMON</div>
+      </div>
+      <span class="quest-check">○</span>
+    </div>
+  </div>
+
+  <!-- VOYAGE -->
+  <div class="quest-section">
+    <div class="quest-section-title">✈️ Voyage</div>
+    <div class="quest-item" onclick="toggleQuest(this)">
+      <span class="quest-ico">🌍</span>
+      <div class="quest-text">
+        <div class="quest-name">Découvrir une nouvelle destination</div>
+        <div class="quest-detail">Un pays, une ville, un coin pas connu — ouvre ta carte et choisis ta prochaine aventure.</div>
+        <div class="quest-xp">+450 XP · RARE</div>
+      </div>
+      <span class="quest-check">○</span>
+    </div>
+    <div class="quest-item" onclick="toggleQuest(this)">
+      <span class="quest-ico">🗺️</span>
+      <div class="quest-text">
+        <div class="quest-name">Explorer son propre pays</div>
+        <div class="quest-detail">Le Gabon regorge de merveilles — Lopé, Loango, Cap Estérias. Le voyage commence à la maison.</div>
+        <div class="quest-xp">+200 XP · UNCOMMON</div>
+      </div>
+      <span class="quest-check">○</span>
+    </div>
+  </div>
+
+  <!-- APPRENTISSAGE -->
+  <div class="quest-section">
+    <div class="quest-section-title">📚 Apprentissage</div>
+    <div class="quest-item" onclick="toggleQuest(this)">
+      <span class="quest-ico">🎓</span>
+      <div class="quest-text">
+        <div class="quest-name">Apprendre une nouvelle compétence</div>
+        <div class="quest-detail">Langue, code, musique, cuisine, sport — choisir une compétence et s'y tenir 30 jours consécutifs.</div>
+        <div class="quest-xp">+350 XP · RARE</div>
+      </div>
+      <span class="quest-check">○</span>
+    </div>
+    <div class="quest-item" onclick="toggleQuest(this)">
+      <span class="quest-ico">📖</span>
+      <div class="quest-text">
+        <div class="quest-name">Lire 12 livres cette année</div>
+        <div class="quest-detail">Un livre par mois — business, roman, philosophie, biographie. La connaissance c'est le vrai XP.</div>
+        <div class="quest-xp">+300 XP · UNCOMMON</div>
+      </div>
+      <span class="quest-check">○</span>
+    </div>
+    <div class="quest-item" onclick="toggleQuest(this)">
+      <span class="quest-ico">🧠</span>
+      <div class="quest-text">
+        <div class="quest-name">Suivre une formation en ligne</div>
+        <div class="quest-detail">Coursera, YouTube, masterclass — l'éducation est accessible 24h/24. No excuses.</div>
+        <div class="quest-xp">+250 XP · UNCOMMON</div>
+      </div>
+      <span class="quest-check">○</span>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- Games -->
+<div class="overlay" id="ov-games" onclick="bgClose(event,'games')">
+<div class="panel" style="max-width:640px">
+  <button class="p-close" onclick="closeOverlay('games')">✕</button>
+  <span class="p-ico">🎲</span>
+  <h2 class="p-title">Jeu</h2>
+  <p class="p-sub">UNO · Quiz Gabon · Culture Générale</p>
+  <hr class="p-div">
+
+  <div class="game-tabs">
+    <button class="gtab active" id="gtab-uno" onclick="switchGameTab('uno')">🃏 UNO</button>
+    <button class="gtab" id="gtab-quiz-gabon" onclick="switchGameTab('quiz-gabon')">🇬🇦 Quiz Gabon</button>
+    <button class="gtab" id="gtab-quiz-global" onclick="switchGameTab('quiz-global')">🌍 Culture Générale</button>
+  </div>
+
+  <!-- UNO -->
+  <div id="game-uno">
+    <div class="uno-table">
+      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(245,245,247,.5);margin-bottom:.5rem">UNO · Tour de <span id="uno-current-player" style="color:var(--ps-glow)">CHRIST</span></div>
+      <div class="uno-scores" id="uno-scores"></div>
+      <div style="font-size:10px;color:rgba(245,245,247,.5);margin:.3rem 0">Carte posée</div>
+      <div style="display:flex;justify-content:center;margin:.5rem 0">
+        <div class="uno-card" id="uno-top-card" style="width:60px;height:88px;font-size:22px"></div>
+      </div>
+      <div class="uno-status" id="uno-status">Clique sur une carte pour jouer !</div>
+      <div style="font-size:10px;color:rgba(245,245,247,.5);margin:.3rem 0">Tes cartes</div>
+      <div class="uno-pile" id="uno-hand"></div>
+      <div style="margin-top:.75rem">
+        <button class="uno-btn" onclick="unoDraw()">🂠 Piocher</button>
+        <button class="uno-btn" onclick="unoUno()" id="uno-shout-btn">📢 UNO !</button>
+        <button class="uno-btn" onclick="initUno()">🔄 Nouvelle partie</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Gabon -->
+  <div id="game-quiz-gabon" style="display:none">
+    <div class="quiz-wrap">
+      <div class="quiz-cat-selector">
+        <button class="quiz-cat-btn active" onclick="setQuizCat('gabon','all',this)">Tout</button>
+        <button class="quiz-cat-btn" onclick="setQuizCat('gabon','geo',this)">Géographie</button>
+        <button class="quiz-cat-btn" onclick="setQuizCat('gabon','histoire',this)">Histoire</button>
+        <button class="quiz-cat-btn" onclick="setQuizCat('gabon','culture',this)">Culture</button>
+      </div>
+      <div class="quiz-score-bar">
+        <span class="quiz-score">Score: <span id="q-gabon-score">0</span>/<span id="q-gabon-total">0</span></span>
+        <span class="quiz-prog">Q <span id="q-gabon-num">1</span>/10</span>
+      </div>
+      <div class="quiz-q" id="q-gabon-question">Prêt pour le Quiz Gabon ?</div>
+      <div class="quiz-opts" id="q-gabon-opts"></div>
+      <div class="quiz-feedback" id="q-gabon-feedback"></div>
+      <button class="quiz-next" id="q-gabon-next" onclick="nextQuizQuestion('gabon')" style="display:none">Question suivante →</button>
+      <button class="quiz-next" id="q-gabon-start" onclick="startQuiz('gabon')">Commencer 🎮</button>
+    </div>
+  </div>
+
+  <!-- Quiz Culture Générale -->
+  <div id="game-quiz-global" style="display:none">
+    <div class="quiz-wrap">
+      <div class="quiz-cat-selector">
+        <button class="quiz-cat-btn active" onclick="setQuizCat('global','all',this)">Tout</button>
+        <button class="quiz-cat-btn" onclick="setQuizCat('global','science',this)">Science</button>
+        <button class="quiz-cat-btn" onclick="setQuizCat('global','histoire',this)">Histoire</button>
+        <button class="quiz-cat-btn" onclick="setQuizCat('global','sport',this)">Sport</button>
+        <button class="quiz-cat-btn" onclick="setQuizCat('global','geo',this)">Géo</button>
+      </div>
+      <div class="quiz-score-bar">
+        <span class="quiz-score">Score: <span id="q-global-score">0</span>/<span id="q-global-total">0</span></span>
+        <span class="quiz-prog">Q <span id="q-global-num">1</span>/10</span>
+      </div>
+      <div class="quiz-q" id="q-global-question">Prêt pour la Culture Générale ?</div>
+      <div class="quiz-opts" id="q-global-opts"></div>
+      <div class="quiz-feedback" id="q-global-feedback"></div>
+      <button class="quiz-next" id="q-global-next" onclick="nextQuizQuestion('global')" style="display:none">Question suivante →</button>
+      <button class="quiz-next" id="q-global-start" onclick="startQuiz('global')">Commencer 🌍</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+
+/* ══════════════════════════════════
+   TRANSLATIONS
+══════════════════════════════════ */
+const T = {
+  fr: {
+    'h-badge':'Édition Anniversaire Spéciale',
+    'h-sub':'Level débloqué. Nouvelles missions disponibles.',
+    'xp-lbl':'Expérience de vie accumulée',
+    'xp-val':'9 999 / 9 999 XP',
+    'sec-apps':'Vos Applications',
+    't1-name':'The Story of CHRIST','t1-sub':'Galerie Souvenirs',
+    't2-name':'Achievement Unlocked','t2-sub':'Succès débloqués',
+    't3-name':'Multiplayer Mode','t3-sub':'Messages des alliés',
+    't4-name':'DLC Pack','t4-sub':'Cadeau numérique',
+    't5-name':'Compte à Rebours','t5-sub':"Jusqu'à la fête",
+    't6-name':'Infos Fête','t6-sub':'Date · Lieu · Heure',
+    't7-name':'Library · Trophées','t7-sub':'Vision Board 2026',
+    'vb-badge':'Upcoming DLC',
+    'vb-h1':'CHRIST 2026','vb-h2':'Expansion Pack',
+    'vb-sub':'Nouvelles quêtes · Objectifs débloqués · Gloire à venir',
+    'vc1-tag':'Career Mode','vc1-name':'Objectif Professionnel',
+    'vc2-tag':'World Tour Map','vc2-name':'Destination Rêve',
+    'vc3-tag':'Legendary Gear','vc3-name':'PS5 — Next Year Boss',
+    'vc4-tag':'Physical Stat Boost','vc4-name':'Health & Gains Goal',
+    'troph-title':'Trophées — À Débloquer',
+    'tr1-rank':'Platine','tr1-name':'The Big One','tr1-desc':'Son objectif principal de l\'année. Le plus grand boss à vaincre.',
+    'tr2-rank':'Or','tr2-name':'Passport Stamped','tr2-desc':'Explorer le monde, tamponner le passeport, écrire l\'histoire.',
+    'tr3-rank':'Argent','tr3-name':'Gains Master','tr3-desc':'Atteindre ses objectifs fitness — corps et esprit au sommet.',
+    'tr4-rank':'Bronze','tr4-name':'New Skill Unlocked','tr4-desc':'Apprendre quelque chose de nouveau. Level up de l\'intérieur.',
+    'tr-lock1':'🔒 VERROUILLÉ','tr-lock2':'🔒 VERROUILLÉ','tr-lock3':'🔒 VERROUILLÉ','tr-lock4':'🔒 VERROUILLÉ',
+    'vb-footer-msg':'System Update : Ton potentiel est illimité à <span>100%</span>.<br>Chargement de la grandeur... <span>■■■■■■■■░░ 80%</span>',
+    's-title':'The Story of CHRIST','s-sub':'Une vie pleine de moments épiques',
+    'm1y':'Chapitre 01','m1t':'La première rencontre mémorable — le jour où tout a commencé. Personnalise avec votre histoire ! 😄',
+    'm2y':'Chapitre 02','m2t':'Ce voyage légendaire dont on parle encore. Remplace par votre meilleur souvenir ensemble.',
+    'm3y':'Chapitre 03','m3t':'La soirée qui s\'est transformée en aventure inoubliable. Vous savez de quoi on parle 😂',
+    'm4y':'Chapitre 04','m4t':'Toujours là, dans les bons et les mauvais moments. Un vrai joueur de co-op dans la vraie vie.',
+    's-hint':'✦ Remplace ces textes par vos vrais souvenirs ✦',
+    'a-title':'Achievement Unlocked','a-sub':'Succès débloqués — CHRIST cette année',
+    'a1n':'[Accomplissement #1]','a1d':'Remplace par un vrai succès de l\'année de CHRIST — promotion, diplôme, projet réussi...',
+    'a2n':'[Accomplissement #2]','a2d':'Un défi relevé avec style cette année. Ce joueur ne recule devant rien.',
+    'a3n':'[Accomplissement #3]','a3d':'La qualité rare d\'un ami comme CHRIST : toujours présent, toujours authentique.',
+    'mp-title':'Multiplayer Mode','mp-sub':'Messages de tes alliés — 3 joueurs connectés',
+    'mp1-from':'[Ami 1]','mp1-role':'Allié de longue date','mp1-body':'"Remplace par un vrai message d\'ami ! Plus c\'est personnel, plus c\'est mémorable. Happy Birthday CHRIST ! 🎮"',
+    'mp2-from':'[Ami 2]','mp2-role':'Co-op Partner','mp2-body':'"Un souvenir partagé fonctionne parfaitement ici. Drôle, touchant, ou les deux. Bonne journée legend ! 🔥"',
+    'mp3-from':'[Ami 3]','mp3-role':'Support Squad','mp3-body':'"Happy Birthday CHRIST ! Famille, collègue, ami — ajoute ici qui tu veux. 🎉"',
+    'd-title':'DLC — Contenu Téléchargeable','d-sub':'Cadeau numérique exclusif · Édition Limitée',
+    'cpn-title':"Cadeau d'anniversaire",'cpn-desc':'Échangeable contre une session co-op épique, un dîner, un concert ou une aventure au choix du détenteur',
+    'cpn-valid':'Valable à vie · Non transférable · Utilisation illimitée',
+    'd-hint':'✦ Personnalise le coupon avec ton vrai cadeau ✦',
+    'cd-title':'Compte à Rebours','cd-sub':'Avant la fête du 27 Mars',
+    'cd-dl':'Jours','cd-hl':'Heures','cd-ml':'Minutes','cd-sl':'Secondes',
+    'cd-msg':'La fête de CHRIST approche — prépare-toi ! 🎮',
+    'i-title':'Infos de la Fête','i-sub':'Coordonnées de la mission principale',
+    'i-date-l':'Date','i-time-l':'Heure','i-loc-l':'Lieu','i-dress-l':'Dress Code',
+    'i-time-v':'[Heure à préciser]','i-loc-v':'[Lieu à préciser]','i-dress-v':'PS5 Vibes — Dark & Fresh 🖤',
+    'nav-home-txt':'Accueil','nav-vision-txt':'DLC',
+  },
+  en: {
+    'h-badge':'Special Birthday Edition',
+    'h-sub':'Level unlocked. New missions available.',
+    'xp-lbl':'Life experience accumulated',
+    'xp-val':'9,999 / 9,999 XP',
+    'sec-apps':'Your Applications',
+    't1-name':'The Story of CHRIST','t1-sub':'Memory Gallery',
+    't2-name':'Achievement Unlocked','t2-sub':'Unlocked this year',
+    't3-name':'Multiplayer Mode','t3-sub':'Messages from allies',
+    't4-name':'DLC Pack','t4-sub':'Digital gift',
+    't5-name':'Countdown','t5-sub':'Until the party',
+    't6-name':'Party Info','t6-sub':'Date · Venue · Time',
+    't7-name':'Library · Trophies','t7-sub':'2026 Vision Board',
+    'vb-badge':'Upcoming DLC',
+    'vb-h1':'CHRIST 2026','vb-h2':'Expansion Pack',
+    'vb-sub':'New quests · Goals unlocked · Glory incoming',
+    'vc1-tag':'Career Mode','vc1-name':'Professional Goal',
+    'vc2-tag':'World Tour Map','vc2-name':'Dream Destination',
+    'vc3-tag':'Legendary Gear','vc3-name':'PS5 — Next Year Boss',
+    'vc4-tag':'Physical Stat Boost','vc4-name':'Health & Gains Goal',
+    'troph-title':'Trophies — To Unlock',
+    'tr1-rank':'Platinum','tr1-name':'The Big One','tr1-desc':'His main goal for the year. The biggest boss to defeat.',
+    'tr2-rank':'Gold','tr2-name':'Passport Stamped','tr2-desc':'Explore the world, stamp the passport, write history.',
+    'tr3-rank':'Silver','tr3-name':'Gains Master','tr3-desc':'Reach fitness goals — body and mind at the top.',
+    'tr4-rank':'Bronze','tr4-name':'New Skill Unlocked','tr4-desc':'Learn something new. Level up from the inside.',
+    'tr-lock1':'🔒 LOCKED','tr-lock2':'🔒 LOCKED','tr-lock3':'🔒 LOCKED','tr-lock4':'🔒 LOCKED',
+    'vb-footer-msg':'System Update: Your potential is capped at <span>100%</span>.<br>Loading greatness... <span>■■■■■■■■░░ 80%</span>',
+    's-title':'The Story of CHRIST','s-sub':'A life full of epic moments',
+    'm1y':'Chapter 01','m1t':'The first memorable meeting — the day it all began. Customize with your own story! 😄',
+    'm2y':'Chapter 02','m2t':'That legendary trip everyone still talks about. Replace with your best shared memory.',
+    'm3y':'Chapter 03','m3t':'The night that turned into an unforgettable adventure. You know what I mean 😂',
+    'm4y':'Chapter 04','m4t':'Always there, in good and bad times. A true co-op player in real life.',
+    's-hint':'✦ Replace these texts with your real memories ✦',
+    'a-title':'Achievement Unlocked','a-sub':'Achievements unlocked — CHRIST this year',
+    'a1n':'[Achievement #1]','a1d':'Replace with a real success of CHRIST\'s year — promotion, degree, completed project...',
+    'a2n':'[Achievement #2]','a2d':'A challenge overcome with style this year. This player never backs down.',
+    'a3n':'[Achievement #3]','a3d':'The rare quality of a friend like CHRIST: always present, always genuine.',
+    'mp-title':'Multiplayer Mode','mp-sub':'Messages from your allies — 3 players online',
+    'mp1-from':'[Friend 1]','mp1-role':'Long-time ally','mp1-body':'"Replace with a real friend\'s message! The more personal, the more memorable. Happy Birthday CHRIST! 🎮"',
+    'mp2-from':'[Friend 2]','mp2-role':'Co-op Partner','mp2-body':'"A shared memory works perfectly here. Funny, touching, or both. Happy birthday legend! 🔥"',
+    'mp3-from':'[Friend 3]','mp3-role':'Support Squad','mp3-body':'"Happy Birthday CHRIST! Family, colleague, friend — add whoever you want here. 🎉"',
+    'd-title':'DLC — Downloadable Content','d-sub':'Exclusive digital gift · Limited Edition',
+    'cpn-title':'Birthday Gift','cpn-desc':'Redeemable for an epic co-op session, dinner, concert or adventure of the holder\'s choice',
+    'cpn-valid':'Lifetime validity · Non-transferable · Unlimited use',
+    'd-hint':'✦ Customize the coupon with your real gift ✦',
+    'cd-title':'Countdown','cd-sub':'Until the March 27th party',
+    'cd-dl':'Days','cd-hl':'Hours','cd-ml':'Minutes','cd-sl':'Seconds',
+    'cd-msg':'CHRIST\'s party is coming — get ready! 🎮',
+    'i-title':'Party Info','i-sub':'Main mission coordinates',
+    'i-date-l':'Date','i-time-l':'Time','i-loc-l':'Venue','i-dress-l':'Dress Code',
+    'i-time-v':'[Time to be confirmed]','i-loc-v':'[Venue to be confirmed]','i-dress-v':'PS5 Vibes — Dark & Fresh 🖤',
+    'nav-home-txt':'Home','nav-vision-txt':'DLC',
+  }
+};
+
+let lang = 'fr';
+
+function applyLang(l) {
+  lang = l;
+  const d = T[l];
+  for (const [id, val] of Object.entries(d)) {
+    const el = document.getElementById(id);
+    if (el) {
+      if (val.includes('<span>')) el.innerHTML = val;
+      else el.textContent = val;
+    }
+  }
+  document.getElementById('lang-toggle').textContent = l === 'fr' ? 'EN' : 'FR';
+  document.getElementById('nav-home').textContent = d['nav-home-txt'];
+  document.getElementById('nav-vision').textContent = d['nav-vision-txt'];
+  document.documentElement.lang = l;
+}
+
+function toggleLang() {
+  applyLang(lang === 'fr' ? 'en' : 'fr');
+}
+
+/* ── BOOT ── */
+function startApp(l) {
+  applyLang(l);
+  const boot = document.getElementById('boot');
+  boot.classList.add('out');
+  setTimeout(() => {
+    boot.style.display = 'none';
+    const app = document.getElementById('app');
+    app.style.display = 'block';
+    setTimeout(() => {
+      app.classList.add('vis');
+      setTimeout(() => {
+        document.getElementById('xp-fill').style.width = '88%';
+      }, 400);
+    }, 50);
+    // Afficher les médias sauvegardés dès le démarrage
+    renderGallery();
+  }, 1000);
+}
+
+/* ── PAGE NAV ── */
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('show'));
+  document.querySelectorAll('.tb-nav').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('show');
+  if (btn) btn.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ── OVERLAYS ── */
+function openOverlay(id) {
+  document.getElementById('ov-' + id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeOverlay(id) {
+  document.getElementById('ov-' + id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+function bgClose(e, id) {
+  if (e.target === document.getElementById('ov-' + id)) closeOverlay(id);
+}
+
+/* ── CLOCK ── */
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('clock').textContent = h + ':' + m;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+/* ── COUNTDOWN to 27 March 2026 ── */
+function updateCountdown() {
+  const target = new Date('2026-03-27T20:00:00');
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) {
+    ['cd-d','cd-h','cd-m','cd-s'].forEach(id => document.getElementById(id).textContent = '00');
+    return;
+  }
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins = Math.floor((diff % 3600000) / 60000);
+  const secs = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-d').textContent = String(days).padStart(2,'0');
+  document.getElementById('cd-h').textContent = String(hours).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(mins).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(secs).padStart(2,'0');
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+/* ── PARTICLES ── */
+const canvas = document.getElementById('cvs');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+function Particle() {
+  this.reset = function() {
+    this.x = Math.random() * W;
+    this.y = H + Math.random() * 100;
+    this.r = Math.random() * 1.8 + 0.4;
+    this.speed = Math.random() * 0.6 + 0.15;
+    this.drift = (Math.random() - 0.5) * 0.3;
+    this.opacity = 0;
+    this.maxOp = Math.random() * 0.55 + 0.15;
+    this.life = 0;
+    this.maxLife = Math.random() * 400 + 200;
+    // blue/white/cyan
+    const hues = [210, 220, 195, 200, 0];
+    const sat = Math.random() > 0.15 ? Math.floor(Math.random()*30+70) : 0;
+    const hue = hues[Math.floor(Math.random()*hues.length)];
+    this.color = `hsl(${hue},${sat}%,80%)`;
+  };
+  this.reset();
+  this.y = Math.random() * H;
+  this.life = Math.random() * this.maxLife;
+}
+
+for (let i = 0; i < 90; i++) particles.push(new Particle());
+
+function animParticles() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => {
+    p.life++;
+    p.y -= p.speed;
+    p.x += p.drift;
+    const t = p.life / p.maxLife;
+    p.opacity = t < 0.15 ? (t / 0.15) * p.maxOp : t > 0.75 ? ((1 - t) / 0.25) * p.maxOp : p.maxOp;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = p.opacity;
+    ctx.fill();
+    if (p.life >= p.maxLife || p.y < -10) p.reset();
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+
+/* ═══════════════════════════════
+   GALLERY
+═══════════════════════════════ */
+let galleryItems = [];
+
+// Charger les médias sauvegardés au démarrage
+(function loadSavedGallery() {
+  try {
+    const saved = localStorage.getItem('christ_gallery');
+    if (saved) {
+      galleryItems = JSON.parse(saved);
+    }
+  } catch(e) {}
+})();
+
+function saveGallery() {
+  try {
+    localStorage.setItem('christ_gallery', JSON.stringify(galleryItems));
+  } catch(e) {
+    // Si localStorage est plein (trop de vidéos/images lourdes), on avertit
+    console.warn('Stockage local plein — certains médias ne seront pas sauvegardés.');
+  }
+}
+
+function handleGalleryUpload(e) {
+  const files = Array.from(e.target.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      galleryItems.push({ src: ev.target.result, name: file.name, type: file.type.startsWith('video') ? 'video' : 'image' });
+      saveGallery();
+      renderGallery();
+    };
+    reader.readAsDataURL(file);
+  });
+  e.target.value = '';
+}
+
+function renderGallery() {
+  const grid = document.getElementById('gallery-grid');
+  const empty = document.getElementById('gal-empty');
+  const count = document.getElementById('gal-count');
+  if (galleryItems.length === 0) {
+    empty.style.display = 'block';
+    grid.innerHTML = '';
+    count.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  count.style.display = 'block';
+  count.textContent = galleryItems.length + ' média' + (galleryItems.length > 1 ? 's' : '') + ' · Survole pour supprimer / télécharger';
+  grid.innerHTML = galleryItems.map((item, i) => `
+    <div class="gal-item">
+      ${item.type === 'video'
+        ? `<video src="${item.src}" muted loop playsinline onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>`
+        : `<img src="${item.src}" alt="${item.name}" loading="lazy">`}
+      <span class="gal-type-badge">${item.type === 'video' ? '▶ VID' : '📷 IMG'}</span>
+      <button class="del-btn" onclick="deleteMedia(${i})" title="Supprimer">✕</button>
+      <button class="dl-btn" onclick="downloadMedia(${i})" title="Télécharger">⬇</button>
+    </div>
+  `).join('');
+}
+
+function deleteMedia(i) {
+  galleryItems.splice(i, 1);
+  saveGallery();
+  renderGallery();
+}
+
+function downloadMedia(i) {
+  const item = galleryItems[i];
+  const a = document.createElement('a');
+  a.href = item.src;
+  a.download = item.name;
+  a.click();
+}
+
+function downloadAllMedia() {
+  if (galleryItems.length === 0) return;
+  galleryItems.forEach((item, i) => {
+    setTimeout(() => {
+      const a = document.createElement('a');
+      a.href = item.src;
+      a.download = item.name;
+      a.click();
+    }, i * 300);
+  });
+}
+
+function clearGallery() {
+  if (galleryItems.length === 0) return;
+  if (confirm('Vider toute la galerie ?')) {
+    galleryItems = [];
+    saveGallery();
+    renderGallery();
+  }
+}
+
+/* ═══════════════════════════════
+   QUEST LOG
+═══════════════════════════════ */
+function toggleQuest(el) {
+  el.classList.toggle('done');
+  const check = el.querySelector('.quest-check');
+  check.textContent = el.classList.contains('done') ? '✓' : '○';
+}
+
+/* ═══════════════════════════════
+   GAME TABS
+═══════════════════════════════ */
+function switchGameTab(tab) {
+  ['uno','quiz-gabon','quiz-global'].forEach(t => {
+    document.getElementById('game-' + t).style.display = t === tab ? 'block' : 'none';
+    const btn = document.getElementById('gtab-' + t);
+    if (btn) btn.classList.toggle('active', t === tab);
+  });
+  if (tab === 'uno' && !unoInitialized) { initUno(); unoInitialized = true; }
+}
+
+/* ═══════════════════════════════
+   UNO GAME
+═══════════════════════════════ */
+let unoInitialized = false;
+let unoDeck = [], unoHandPlayer = [], unoHandCPU = [], unoTopCard = null, unoCurrentTurn = 'player', unoGameOver = false, unoDrawStack = 0;
+const unoColors = ['red','blue','green','yellow'];
+const unoValues = ['0','1','2','3','4','5','6','7','8','9','⇄','⊘','+2'];
+const unoSpecials = ['Wild','Wild +4'];
+
+function buildUnoDeck() {
+  const deck = [];
+  unoColors.forEach(c => {
+    unoValues.forEach(v => { deck.push({color:c,value:v}); if(v!=='0') deck.push({color:c,value:v}); });
+  });
+  unoSpecials.forEach(v => { for(let i=0;i<4;i++) deck.push({color:'black',value:v}); });
+  return deck.sort(()=>Math.random()-.5);
+}
+
+function unoCardClass(card) { return 'uno-card ' + card.color; }
+function unoCardLabel(card) { return card.value; }
+
+function renderUnoCard(card, i, inHand=false) {
+  const sel = inHand && unoDrawStack > 0 ? '' : '';
+  return `<div class="${unoCardClass(card)}" ${inHand ? `onclick="playUnoCard(${i})"` : ''} title="${card.color} ${card.value}">${unoCardLabel(card)}</div>`;
+}
+
+function renderUno() {
+  const top = document.getElementById('uno-top-card');
+  if (unoTopCard) { top.className = unoCardClass(unoTopCard); top.textContent = unoCardLabel(unoTopCard); top.style.width='60px'; top.style.height='88px'; top.style.fontSize='22px'; }
+  const hand = document.getElementById('uno-hand');
+  hand.innerHTML = unoHandPlayer.map((c,i) => renderUnoCard(c,i,true)).join('');
+  document.getElementById('uno-scores').innerHTML =
+    `<div class="uno-score-item">🎮 Toi: <span>${unoHandPlayer.length}</span> cartes</div>
+     <div class="uno-score-item">🤖 CPU: <span>${unoHandCPU.length}</span> cartes</div>`;
+  document.getElementById('uno-current-player').textContent = unoCurrentTurn === 'player' ? 'CHRIST' : 'CPU';
+}
+
+function initUno() {
+  unoDeck = buildUnoDeck();
+  unoHandPlayer = [unoDeck.pop(),unoDeck.pop(),unoDeck.pop(),unoDeck.pop(),unoDeck.pop(),unoDeck.pop(),unoDeck.pop()];
+  unoHandCPU = [unoDeck.pop(),unoDeck.pop(),unoDeck.pop(),unoDeck.pop(),unoDeck.pop(),unoDeck.pop(),unoDeck.pop()];
+  unoTopCard = unoDeck.pop();
+  while (unoTopCard.color === 'black') { unoDeck.unshift(unoTopCard); unoTopCard = unoDeck.pop(); }
+  unoCurrentTurn = 'player'; unoGameOver = false; unoDrawStack = 0;
+  setUnoStatus('À toi de jouer ! Clique une carte de ta main 🃏');
+  renderUno();
+}
+
+function canPlay(card) {
+  if (card.color === 'black') return true;
+  if (unoDrawStack > 0 && unoTopCard.value === '+2') return card.value === '+2';
+  if (unoDrawStack > 0 && unoTopCard.value === 'Wild +4') return card.value === 'Wild +4';
+  return card.color === unoTopCard.color || card.value === unoTopCard.value;
+}
+
+function playUnoCard(i) {
+  if (unoCurrentTurn !== 'player' || unoGameOver) return;
+  const card = unoHandPlayer[i];
+  if (!canPlay(card)) { setUnoStatus('❌ Cette carte ne peut pas être jouée !'); return; }
+  unoHandPlayer.splice(i, 1);
+  if (card.color === 'black') {
+    const chosen = unoColors[Math.floor(Math.random()*4)];
+    unoTopCard = {...card, color: chosen};
+    setUnoStatus(`🌈 Wild joué ! Couleur choisie : ${chosen.toUpperCase()}`);
+  } else { unoTopCard = card; }
+  if (card.value === '+2') unoDrawStack += 2;
+  if (card.value === 'Wild +4') unoDrawStack += 4;
+  if (card.value === '⇄') { setUnoStatus('🔄 Sens inversé !'); }
+  if (card.value === '⊘') { setUnoStatus('🚫 CPU passé son tour !'); cpuTurn(); return; }
+  if (unoHandPlayer.length === 0) { setUnoStatus('🏆 TU AS GAGNÉ ! Bravo CHRIST !'); unoGameOver = true; renderUno(); return; }
+  if (unoHandPlayer.length === 1) setUnoStatus('📢 Dis UNO ! vite !');
+  renderUno();
+  unoCurrentTurn = 'cpu';
+  setTimeout(cpuTurn, 1200);
+}
+
+function cpuTurn() {
+  if (unoGameOver) return;
+  if (unoDrawStack > 0) {
+    for(let i=0;i<unoDrawStack;i++) { if(unoDeck.length>0) unoHandCPU.push(unoDeck.pop()); }
+    setUnoStatus(`🤖 CPU pioche ${unoDrawStack} cartes !`);
+    unoDrawStack = 0; unoCurrentTurn = 'player'; renderUno(); return;
+  }
+  const playable = unoHandCPU.map((c,i)=>({c,i})).filter(({c})=>canPlay(c));
+  if (playable.length > 0) {
+    const chosen = playable[Math.floor(Math.random()*playable.length)];
+    const card = chosen.c;
+    unoHandCPU.splice(chosen.i, 1);
+    if (card.color === 'black') { unoTopCard = {...card, color: unoColors[Math.floor(Math.random()*4)]}; }
+    else { unoTopCard = card; }
+    if (card.value === '+2') { unoDrawStack += 2; setUnoStatus(`🤖 CPU joue +2 ! Tu dois piocher ${unoDrawStack} !`); }
+    else if (card.value === 'Wild +4') { unoDrawStack += 4; setUnoStatus(`🤖 CPU joue Wild +4 ! Tu dois piocher ${unoDrawStack} !`); }
+    else if (card.value === '⊘') { setUnoStatus('🤖 CPU joue Skip — ton tour est sauté !'); unoCurrentTurn='cpu'; setTimeout(cpuTurn,1000); renderUno(); return; }
+    else { setUnoStatus(`🤖 CPU joue ${card.color} ${card.value}`); }
+    if (unoHandCPU.length === 0) { setUnoStatus('😱 CPU a gagné ! Relance une partie !'); unoGameOver = true; renderUno(); return; }
+  } else {
+    if (unoDeck.length > 0) unoHandCPU.push(unoDeck.pop());
+    setUnoStatus('🤖 CPU pioche une carte...');
+  }
+  unoCurrentTurn = 'player'; renderUno();
+}
+
+function unoDraw() {
+  if (unoCurrentTurn !== 'player' || unoGameOver) return;
+  if (unoDrawStack > 0) {
+    for(let i=0;i<unoDrawStack;i++) { if(unoDeck.length>0) unoHandPlayer.push(unoDeck.pop()); }
+    setUnoStatus(`Tu pioches ${unoDrawStack} cartes 😬`);
+    unoDrawStack = 0;
+  } else {
+    if (unoDeck.length > 0) { unoHandPlayer.push(unoDeck.pop()); setUnoStatus('Tu pioches une carte...'); }
+    else { setUnoStatus('La pioche est vide !'); }
+  }
+  unoCurrentTurn = 'cpu'; renderUno(); setTimeout(cpuTurn, 1000);
+}
+
+function unoUno() { setUnoStatus('📢 UNO ! Bien joué CHRIST 🔥'); }
+function setUnoStatus(msg) { document.getElementById('uno-status').textContent = msg; }
+
+/* ═══════════════════════════════
+   QUIZ DATA
+═══════════════════════════════ */
+const QUIZ_DATA = {
+  gabon: {
+    all: [
+      {q:"Quelle est la capitale du Gabon ?",opts:["Libreville","Port-Gentil","Franceville","Oyem"],a:0,cat:'geo'},
+      {q:"Quel fleuve traverse Libreville ?",opts:["Ogooué","Komo","Ntem","Ivindo"],a:1,cat:'geo'},
+      {q:"En quelle année le Gabon a-t-il obtenu son indépendance ?",opts:["1958","1960","1962","1965"],a:1,cat:'histoire'},
+      {q:"Qui a été le premier président du Gabon ?",opts:["Omar Bongo","Léon Mba","André Tarallo","Jean-Hilaire Aubame"],a:1,cat:'histoire'},
+      {q:"Combien d'années Omar Bongo a-t-il dirigé le Gabon ?",opts:["25 ans","32 ans","41 ans","50 ans"],a:2,cat:'histoire'},
+      {q:"Quel est le surnom de Port-Gentil ?",opts:["La Perle","La Cité Pétrolière","La Capitale Économique","L'Or Noir"],a:2,cat:'culture'},
+      {q:"Quelle est la monnaie du Gabon ?",opts:["Franc Gabonais","Franc CFA","Euro","Dalasi"],a:1,cat:'culture'},
+      {q:"Quel parc national abrite les gorilles et éléphants de forêt au Gabon ?",opts:["Lopé","Loango","Moukalaba","Minkébé"],a:0,cat:'geo'},
+      {q:"Le Gabon est bordé par quel océan ?",opts:["Indien","Pacifique","Atlantique","Arctique"],a:2,cat:'geo'},
+      {q:"Quelle est la principale ressource naturelle du Gabon ?",opts:["Diamants","Cacao","Pétrole","Or"],a:2,cat:'culture'},
+      {q:"Dans quel pays le Gabon se situe-t-il géographiquement ?",opts:["Afrique de l'Ouest","Afrique Centrale","Afrique de l'Est","Afrique du Nord"],a:1,cat:'geo'},
+      {q:"Le Gabon est traversé par quelle ligne imaginaire ?",opts:["Tropique du Cancer","Tropique du Capricorne","Équateur","Méridien de Greenwich"],a:2,cat:'geo'},
+      {q:"Quel est le nom de la chaîne de montagne qui traverse le Gabon ?",opts:["Massif du Chaillu","Monts Cristal","Les deux","Aucune"],a:2,cat:'geo'},
+      {q:"Quel pourcentage du territoire gabonais est couvert de forêts tropicales ?",opts:["50%","65%","80%","90%"],a:2,cat:'culture'},
+      {q:"Le Gabon est membre de quelle organisation sous-régionale africaine ?",opts:["CEDEAO","CEMAC","SADC","UMA"],a:1,cat:'culture'},
+    ],
+    geo:[], histoire:[], culture:[]
+  },
+  global: {
+    all: [
+      {q:"Quel est le plus grand pays du monde par superficie ?",opts:["Canada","États-Unis","Chine","Russie"],a:3,cat:'geo'},
+      {q:"En quelle année l'homme a-t-il marché sur la Lune pour la première fois ?",opts:["1965","1967","1969","1971"],a:2,cat:'histoire'},
+      {q:"Combien d'os compte le corps humain adulte ?",opts:["186","206","226","256"],a:1,cat:'science'},
+      {q:"Quelle est la planète la plus proche du Soleil ?",opts:["Vénus","Mars","Mercure","Terre"],a:2,cat:'science'},
+      {q:"Combien de pays composent l'Union Européenne (2024) ?",opts:["25","27","28","30"],a:1,cat:'geo'},
+      {q:"Quel pays a remporté la Coupe du Monde FIFA 2022 ?",opts:["France","Brésil","Argentine","Allemagne"],a:2,cat:'sport'},
+      {q:"Qui a peint la Joconde ?",opts:["Raphaël","Michel-Ange","Léonard de Vinci","Botticelli"],a:2,cat:'culture'},
+      {q:"Quelle est la plus haute montagne du monde ?",opts:["K2","Kangchenjunga","Mont Everest","Lhotse"],a:2,cat:'geo'},
+      {q:"Dans quel sport Usain Bolt est-il champion olympique ?",opts:["Saut en longueur","Natation","Athlétisme","Cyclisme"],a:2,cat:'sport'},
+      {q:"Quelle est la langue la plus parlée au monde ?",opts:["Anglais","Mandarin","Espagnol","Hindi"],a:1,cat:'culture'},
+      {q:"Quel élément chimique a le symbole 'O' ?",opts:["Or","Osmium","Oxygène","Ozone"],a:2,cat:'science'},
+      {q:"Combien de continents compte la Terre ?",opts:["5","6","7","8"],a:2,cat:'geo'},
+      {q:"En quelle année a eu lieu la Révolution Française ?",opts:["1776","1789","1799","1815"],a:1,cat:'histoire'},
+      {q:"Quel pays a inventé le football moderne ?",opts:["France","Italie","Angleterre","Brésil"],a:2,cat:'sport'},
+      {q:"Quel est le plus grand désert du monde ?",opts:["Sahara","Gobi","Antarctique","Arabie"],a:2,cat:'geo'},
+    ],
+    science:[], histoire:[], sport:[], geo:[]
+  }
+};
+
+// Populate filtered categories
+['geo','histoire','culture'].forEach(cat => {
+  QUIZ_DATA.gabon[cat] = QUIZ_DATA.gabon.all.filter(q=>q.cat===cat);
+});
+['science','histoire','sport','geo'].forEach(cat => {
+  QUIZ_DATA.global[cat] = QUIZ_DATA.global.all.filter(q=>q.cat===cat);
+});
+
+/* ═══════════════════════════════
+   QUIZ ENGINE
+═══════════════════════════════ */
+let quizState = {
+  gabon: { questions:[], idx:0, score:0, cat:'all', answered:false },
+  global: { questions:[], idx:0, score:0, cat:'all', answered:false }
+};
+
+function setQuizCat(quiz, cat, btn) {
+  quizState[quiz].cat = cat;
+  document.querySelectorAll(`#game-quiz-${quiz} .quiz-cat-btn`).forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function startQuiz(quiz) {
+  const state = quizState[quiz];
+  const pool = QUIZ_DATA[quiz][state.cat].length > 0 ? QUIZ_DATA[quiz][state.cat] : QUIZ_DATA[quiz].all;
+  const shuffled = [...pool].sort(()=>Math.random()-.5);
+  state.questions = shuffled.slice(0, Math.min(10, shuffled.length));
+  state.idx = 0; state.score = 0; state.answered = false;
+  document.getElementById(`q-${quiz}-start`).style.display = 'none';
+  document.getElementById(`q-${quiz}-next`).style.display = 'none';
+  renderQuizQuestion(quiz);
+}
+
+function renderQuizQuestion(quiz) {
+  const state = quizState[quiz];
+  if (state.idx >= state.questions.length) { showQuizResult(quiz); return; }
+  const q = state.questions[state.idx];
+  state.answered = false;
+  document.getElementById(`q-${quiz}-question`).textContent = q.q;
+  document.getElementById(`q-${quiz}-num`).textContent = state.idx + 1;
+  document.getElementById(`q-${quiz}-score`).textContent = state.score;
+  document.getElementById(`q-${quiz}-total`).textContent = state.questions.length;
+  document.getElementById(`q-${quiz}-feedback`).textContent = '';
+  document.getElementById(`q-${quiz}-next`).style.display = 'none';
+  const opts = document.getElementById(`q-${quiz}-opts`);
+  const shuffledOpts = q.opts.map((o,i)=>({o,i})).sort(()=>Math.random()-.5);
+  opts.innerHTML = shuffledOpts.map(({o,i}) =>
+    `<button class="quiz-opt" onclick="answerQuiz('${quiz}',${i},this)">${o}</button>`
+  ).join('');
+}
+
+function answerQuiz(quiz, answerIdx, btn) {
+  const state = quizState[quiz];
+  if (state.answered) return;
+  state.answered = true;
+  const q = state.questions[state.idx];
+  const allBtns = btn.closest('.quiz-opts').querySelectorAll('.quiz-opt');
+  allBtns.forEach(b=>b.disabled=true);
+  if (answerIdx === q.a) {
+    btn.classList.add('correct');
+    state.score++;
+    document.getElementById(`q-${quiz}-feedback`).textContent = '✅ Bonne réponse !';
+  } else {
+    btn.classList.add('wrong');
+    allBtns.forEach(b=>{ if(parseInt(b.dataset?.ans)===q.a) b.classList.add('correct'); });
+    document.getElementById(`q-${quiz}-feedback`).textContent = `❌ La bonne réponse était : ${q.opts[q.a]}`;
+  }
+  document.getElementById(`q-${quiz}-score`).textContent = state.score;
+  if (state.idx + 1 < state.questions.length) {
+    document.getElementById(`q-${quiz}-next`).style.display = 'inline-block';
+  } else {
+    setTimeout(()=>showQuizResult(quiz), 1200);
+  }
+}
+
+function nextQuizQuestion(quiz) {
+  quizState[quiz].idx++;
+  document.getElementById(`q-${quiz}-next`).style.display = 'none';
+  renderQuizQuestion(quiz);
+}
+
+function showQuizResult(quiz) {
+  const state = quizState[quiz];
+  const pct = Math.round((state.score / state.questions.length) * 100);
+  const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '🥈' : pct >= 40 ? '🥉' : '😅';
+  document.getElementById(`q-${quiz}-question`).textContent = `${emoji} Score final : ${state.score}/${state.questions.length} (${pct}%)`;
+  document.getElementById(`q-${quiz}-opts`).innerHTML = '';
+  document.getElementById(`q-${quiz}-feedback`).textContent = pct >= 80 ? 'CHRIST est un génie !' : pct >= 60 ? 'Beau résultat !' : 'Bon courage, réessaie !';
+  document.getElementById(`q-${quiz}-next`).style.display = 'none';
+  document.getElementById(`q-${quiz}-start`).style.display = 'inline-block';
+  document.getElementById(`q-${quiz}-start`).textContent = '🔄 Rejouer';
+}
+
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.overlay.open').forEach(ov => {
+      ov.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  }
+});
+</script>
+</body>
+</html>
